@@ -1,10 +1,14 @@
 var fs = require('fs');
+var path = require('path');
 
-var callback = function(err, data) {
+var callback = function(err, list) {
     if (err) return console.log("Error");
-    var fileNum = data.split('\n').length -1;
-    console.log(fileNum);
+    for (i = 0; i < list.length; i++) {
+        if (path.extname(list[i]) == "." + process.argv[3]) {
+            console.log(list[i]);
+        };
+    };
 };
 
-fs.readFile(process.argv[2], 'utf8', callback);
+fs.readdir(process.argv[2], callback);
 
