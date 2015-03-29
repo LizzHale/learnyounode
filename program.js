@@ -1,13 +1,12 @@
-var path = process.argv[2];
-var extension = process.argv[3];
+var http = require('http');
 
-var readAndFilter = require('./file.js');
+var url = process.argv[2];
 
-
-readAndFilter(path, extension, function(error, list) {
-    if (error) 
-        return console.log('There was an error:', error)
-    list.forEach(function(file) {
-        console.log(file);
+http.get(url, function callback (response) {
+    response.setEncoding('utf8');
+    response.on("data", function (data) {
+        console.log(data);
+    }).on("error", function (error) {
+        console.log(error);
     });
 });
