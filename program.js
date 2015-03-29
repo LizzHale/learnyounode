@@ -1,14 +1,13 @@
-var fs = require('fs');
-var path = require('path');
+var path = process.argv[2];
+var extension = process.argv[3];
 
-var callback = function(err, list) {
-    if (err) return console.log("Error");
-    for (i = 0; i < list.length; i++) {
-        if (path.extname(list[i]) == "." + process.argv[3]) {
-            console.log(list[i]);
-        };
-    };
-};
+var readAndFilter = require('./file.js');
 
-fs.readdir(process.argv[2], callback);
 
+readAndFilter(path, extension, function(error, list) {
+    if (error) 
+        return console.log('There was an error:', error)
+    list.forEach(function(file) {
+        console.log(file);
+    });
+});
