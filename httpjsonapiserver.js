@@ -10,13 +10,13 @@ function parsetime(time) {
         "hour": time.getHours(),
         "minute": time.getMinutes(),
         "second": time.getSeconds()
-    }
+    };
 }
 
 function unixtime(time) {
     return {
         "unixtime": time.getTime()
-    }
+    };
 }
 
 // two routes:
