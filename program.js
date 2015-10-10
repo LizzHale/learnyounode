@@ -1,16 +1,30 @@
-var http = require('http');
+// Use the net module to create a raw TCP server
+var net = require('net');
 
-var url = process.argv[2];
+// Port number is supplied as the first commandline argument
+var port = process.argv[2];
 
-http.get(url, function callback (response) {
-    var finished = "" // still waiting
-    response.setEncoding('utf8');
-    response.on("data", function (data) {
-        finished = finished + data;
-    }).on("error", function (error) {
-        console.log(error);
-    }).on("end", function (end) {
-        console.log(finished.length);
-        console.log(finished);
-    });
+// Create a function to zero-fill the month, day, hour, and minute
+function zeroFill(i) {
+    return (i < 10 ? '0' : '') + i
+}
+
+// Format the current date and time to use in the socket duplex stream
+function time() {
+    var date = new Date();
+    return date.getFullYear() + '-'
+        + zeroFill(date.getMonth() + 1) + '-'
+        + zeroFill(date.getDate()) + ' '
+        + zeroFill(date.getHours()) + ':'
+        + zeroFill(date.getMinutes());
+}
+
+// Interesting: the callback function used in createServer is called more than once.
+// Every connection received by your server triggers another call to the callback
+var server = net.createServer(function(socket) {
+    // The socket object contains a lot of met-data regarding the connection
+    // but! it's also a duplex stream.
+    socket.end(time() + '\n', 'utf8');
 });
+
+server.listen(port);
